@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Michael's Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060810;--bg2:#0d1117;--bg3:#161b27;--glass:rgba(22,27,39,0.6);--glass-heavy:rgba(13,17,23,0.92);--blue:#2563EB;--blue-bright:#3B82F6;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--purple:#7C3AED;--cyan:#06B6D4;--glow-b:rgba(59,130,246,0.35);--glow-g:rgba(16,185,129,0.35);--glow-r:rgba(239,68,68,0.35);--border:rgba(255,255,255,0.07);--border-bright:rgba(255,255,255,0.14);--text:#F1F5F9;--text2:#94A3B8;--text3:#475569}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+#particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.pt{position:absolute;border-radius:50%;pointer-events:none;animation:float 20s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);opacity:.3}33%{transform:translate(80px,-120px) scale(1.2);opacity:.15}66%{transform:translate(-60px,-80px) scale(.8);opacity:.25}}
+.shell{position:relative;z-index:1;max-width:1920px;margin:0 auto;padding:16px}
+@media(min-width:768px){.shell{padding:24px}}
+.ticker-wrap{background:rgba(37,99,235,0.1);border:1px solid rgba(59,130,246,0.18);border-radius:12px;overflow:hidden;padding:10px 0;margin-bottom:14px;position:relative}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;width:60px;height:100%;z-index:2}
+.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.ticker-wrap::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.ticker-inner{display:flex;gap:40px;width:max-content;animation:ticker 50s linear infinite;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick{display:flex;align-items:center;gap:6px;white-space:nowrap;padding:0 4px}
+.tick-sym{color:var(--blue-bright);font-weight:700}
+.tick-val{color:var(--text)}
+.tick-chg.up{color:var(--green)}
+.tick-chg.dn{color:var(--red)}
+.tick-sep{color:var(--text3)}
+.header{background:var(--glass-heavy);backdrop-filter:blur(40px) saturate(200%);-webkit-backdrop-filter:blur(40px) saturate(200%);border:1px solid var(--border-bright);border-radius:20px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 20px var(--glow-b);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;animation:logopulse 4s ease-in-out infinite;flex-shrink:0}
+@keyframes logopulse{0%,100%{box-shadow:0 0 20px var(--glow-b)}50%{box-shadow:0 0 40px var(--glow-b)}}
+.brand h1{font-size:17px;font-weight:800;letter-spacing:-0.3px;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+@media(min-width:768px){.brand h1{font-size:21px}}
+.tagline{font-size:10px;color:var(--text3);font-weight:500;letter-spacing:0.5px;margin-top:2px}
+.header-right{display:flex;align-items:center;gap:10px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--glow-g);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.header-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)}
+.api-banner{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(239,68,68,0.07));border:1px solid rgba(245,158,11,0.28);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.api-banner.hidden{display:none}
+.api-banner-text{font-size:12px;color:var(--yellow);font-weight:700}
+.api-banner-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.btn-api-set{padding:7px 14px;background:var(--yellow);border:none;border-radius:8px;color:#000;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-api-set:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(245,158,11,0.4)}
+.save-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.18);border-radius:12px;padding:10px 16px;margin-bottom:14px}
+.save-status{font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:6px}
+.save-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite}
+.save-actions{display:flex;gap:7px;flex-wrap:wrap}
+.cmd-box{background:var(--glass-heavy);border:1px solid var(--border-bright);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,0.4);position:relative;overflow:hidden}
+.cmd-box::before{content:'';position:absolute;inset:0;border-radius:18px;background:linear-gradient(135deg,rgba(37,99,235,0.05),rgba(124,58,237,0.03));pointer-events:none}
+.cmd-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+.cmd-row{display:flex;gap:8px;align-items:stretch}
+.cmd-input{flex:1;padding:13px 16px;background:rgba(6,8,16,0.7);border:1px solid var(--border-bright);border-radius:12px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;font-weight:500;transition:all .3s}
+.cmd-input:focus{outline:none;border-color:var(--blue-bright);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+.cmd-input::placeholder{color:var(--text3)}
+.cmd-send{padding:13px 20px;background:linear-gradient(135deg,var(--blue),var(--purple));border:none;border-radius:12px;color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .25s;white-space:nowrap}
+.cmd-send:hover{transform:translateY(-2px);box-shadow:0 6px 20px var(--glow-b)}
+.cmd-modes{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.mode-pill{padding:5px 12px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:16px;font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--text2)}
+.mode-pill:hover{background:rgba(59,130,246,0.1);border-color:var(--blue-bright);color:var(--text)}
+.mode-pill.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 0 14px var(--glow-b)}
+.ai-response{margin-top:12px;padding:14px;background:rgba(6,8,16,0.7);border:1px solid rgba(59,130,246,0.18);border-radius:12px;font-size:12px;line-height:1.7;color:var(--text2);display:none;max-height:260px;overflow-y:auto;font-family:'JetBrains Mono',monospace}
+.ai-response.show{display:block}
+.ai-hdr{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--blue-bright);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.spinner{width:9px;height:9px;border-radius:50%;border:2px solid rgba(59,130,246,0.3);border-top-color:var(--blue-bright);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.typing-cursor{display:inline-block;width:2px;height:12px;background:var(--blue-bright);animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:1px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 16px;background:var(--glass);border:1px solid var(--border);border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;color:var(--text2)}
+@media(min-width:768px){.tab{padding:11px 20px;font-size:12px}}
+.tab:hover{background:rgba(59,130,246,0.09);border-color:var(--blue-bright);color:var(--text)}
+.tab.active{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 16px var(--glow-b)}
+.page{display:none}
+.page.active{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+@media(min-width:640px){.grid-2{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--glass);backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);border:1px solid var(--border);border-radius:16px;padding:18px;transition:all .3s cubic-bezier(.25,.8,.25,1);position:relative;overflow:hidden}
+.card[onclick]{cursor:pointer}
+.card[onclick]:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,0.5);border-color:var(--border-bright)}
+.card.stat{border-top:2px solid var(--blue-bright)}.card.success{border-top:2px solid var(--green)}.card.warning{border-top:2px solid var(--yellow)}.card.danger{border-top:2px solid var(--red)}
+.card-label{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.card-val{font-size:32px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,var(--blue-bright),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:6px 0;line-height:1.1}
+@media(min-width:768px){.card-val{font-size:42px}}
+.card-sub{font-size:11px;color:var(--text3);margin-top:5px;line-height:1.5}
+.badge{display:inline-block;padding:3px 9px;border-radius:16px;font-size:9px;font-weight:700;margin:2px;font-family:'JetBrains Mono',monospace}
+.badge.g{background:rgba(16,185,129,.13);color:var(--green);border:1px solid rgba(16,185,129,.28)}
+.badge.r{background:rgba(239,68,68,.13);color:var(--red);border:1px solid rgba(239,68,68,.28)}
+.badge.b{background:rgba(59,130,246,.13);color:var(--blue-bright);border:1px solid rgba(59,130,246,.28)}
+.badge.y{background:rgba(245,158,11,.13);color:var(--yellow);border:1px solid rgba(245,158,11,.28)}
+.prog{width:100%;height:6px;background:rgba(255,255,255,0.05);border-radius:6px;overflow:hidden;margin:9px 0}
+.prog-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width 1.5s cubic-bezier(.25,.8,.25,1);position:relative;overflow:hidden}
+.prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);animation:shimmer 2s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.btn{display:inline-block;padding:10px 20px;background:var(--blue);border:none;border-radius:9px;color:#fff;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .22s;text-align:center}
+.btn:hover{transform:translateY(-2px);box-shadow:0 5px 20px var(--glow-b)}
+.btn.sm{padding:6px 12px;font-size:10px}.btn.sec{background:rgba(255,255,255,0.06);color:var(--text2);border:1px solid var(--border)}.btn.sec:hover{background:rgba(255,255,255,0.11);box-shadow:none}.btn.suc{background:var(--green);color:#000}.btn.suc:hover{box-shadow:0 5px 18px var(--glow-g)}.btn.dan{background:var(--red);color:#fff}.btn.dan:hover{box-shadow:0 5px 18px var(--glow-r)}.btn.wrn{background:var(--yellow);color:#000}.btn.w-full{width:100%;display:block}
+.mt-1{margin-top:7px}.mt-2{margin-top:13px}.mt-3{margin-top:20px}
+.li{padding:11px 13px;background:rgba(255,255,255,0.022);border-left:2px solid var(--blue-bright);border-radius:9px;margin:7px 0;transition:all .22s;cursor:pointer}
+.li:hover{background:rgba(59,130,246,0.07);transform:translateX(4px);border-left-width:3px}
+.li-title{font-weight:700;font-size:12px;margin-bottom:2px}
+.li-desc{font-size:10px;color:var(--text3);line-height:1.5}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.87);backdrop-filter:blur(10px);z-index:1000;align-items:center;justify-content:center;padding:20px}
+.modal.show{display:flex}
+.modal-box{background:var(--glass-heavy);border:1px solid var(--border-bright);border-radius:20px;padding:26px;max-width:580px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.7);position:relative;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:12px;background:linear-gradient(90deg,var(--blue-bright),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.modal-body{font-size:12px;line-height:1.8;color:var(--text2);white-space:pre-wrap;margin-bottom:18px}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text3);font-size:24px;cursor:pointer;line-height:1;transition:all .2s}
+.modal-close:hover{color:var(--red);transform:rotate(90deg)}
+.modal-input{width:100%;padding:11px 14px;background:rgba(6,8,16,0.7);border:1px solid var(--border-bright);border-radius:9px;color:var(--text);font-family:'Syne',sans-serif;font-size:13px;margin:5px 0;transition:all .3s}
+.modal-input:focus{outline:none;border-color:var(--blue-bright)}
+.modal-input::placeholder{color:var(--text3)}
+.venn{position:relative;height:420px;margin:24px 0}
+@media(min-width:768px){.venn{height:500px}}
+.vc{position:absolute;width:210px;height:210px;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;text-align:center;cursor:pointer;transition:all .35s;backdrop-filter:blur(10px);padding:14px}
+@media(min-width:768px){.vc{width:270px;height:270px;font-size:14px}}
+.vc:hover{transform:scale(1.1);z-index:10}
+.vc.c1{top:10px;left:30px;background:rgba(37,99,235,.12);border-color:var(--blue-bright);box-shadow:0 0 36px var(--glow-b)}
+.vc.c2{top:10px;right:30px;background:rgba(16,185,129,.12);border-color:var(--green);box-shadow:0 0 36px var(--glow-g)}
+.vc.c3{bottom:10px;left:50%;transform:translateX(-50%);background:rgba(245,158,11,.12);border-color:var(--yellow);box-shadow:0 0 36px rgba(245,158,11,.32)}
+.vc.c3:hover{transform:translateX(-50%) scale(1.1)}
+@media(min-width:768px){.vc.c1{left:90px}.vc.c2{right:90px}}
+.vo{position:absolute;background:rgba(255,255,255,.94);color:#000;padding:6px 11px;border-radius:7px;font-weight:800;font-size:9px;border:2px solid #000;cursor:pointer;transition:all .22s;z-index:20;text-align:center}
+@media(min-width:768px){.vo{font-size:11px;padding:8px 13px}}
+.vo:hover{transform:scale(1.12);box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.vo.center{top:142px;left:50%;transform:translateX(-50%);background:var(--red);color:#fff;border-color:var(--red);padding:10px 16px;font-size:11px;line-height:1.3}
+.vo.center:hover{transform:translateX(-50%) scale(1.1)}
+@media(min-width:768px){.vo.center{top:168px}}
+.idea{background:rgba(255,255,255,0.022);padding:13px;border-left:2px solid var(--text3);border-radius:9px;margin:9px 0;cursor:pointer;transition:all .22s}
+.idea:hover{border-left-color:var(--blue-bright);transform:translateX(4px);background:rgba(59,130,246,0.04)}
+.idea.voted{border-left-color:var(--green);background:rgba(16,185,129,0.04)}
+.vote{float:right;padding:4px 10px;background:rgba(16,185,129,0.12);border:1px solid var(--green);border-radius:14px;font-size:9px;font-weight:700;cursor:pointer;transition:all .2s;color:var(--green)}
+.vote:hover{background:var(--green);color:#000}
+.cat{display:inline-block;padding:2px 7px;background:rgba(124,58,237,0.12);border:1px solid var(--purple);border-radius:6px;font-size:8px;font-weight:700;margin-right:5px;color:var(--purple)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);gap:12px}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.settings-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.toggle{position:relative;width:42px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,.09);border-radius:22px;transition:.28s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.28s}
+.toggle input:checked + .toggle-slider{background:var(--blue)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(20px)}
+.grind-out{background:rgba(6,8,16,0.8);border:1px solid rgba(59,130,246,.18);border-radius:12px;padding:16px;margin-top:12px;display:none;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--text2);max-height:380px;overflow-y:auto}
+.grind-out.show{display:block}
+@media(max-width:640px){.header{border-radius:14px;padding:10px 12px}.brand h1{font-size:14px}.cmd-box{padding:12px;border-radius:14px}.card{padding:14px;border-radius:12px}.card-val{font-size:28px}.venn{transform:scale(0.7);transform-origin:top center;height:320px}}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+<div class="shell">
+
+<div class="ticker-wrap"><div class="ticker-inner" id="ticker"></div></div>
+
+<div class="header">
+  <div class="brand">
+    <div class="logo">M</div>
+    <div>
+      <h1>MICHAEL'S COMMAND CENTER</h1>
+      <div class="tagline">FIND THE GRIND &middot; FIX THE FLOW &middot; BUILD THE WEALTH</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <div class="header-time" id="clock">--:--</div>
+    <button class="btn sm sec" onclick="openSettings()">&#9881;&#65039; Settings</button>
+  </div>
+</div>
+
+<div class="api-banner" id="apiBanner">
+  <div>
+    <div class="api-banner-text">&#9888;&#65039; Claude API Key Not Set</div>
+    <div class="api-banner-sub">AI Mode, Grind Finder, and PBJ analysis require your key. Stored locally only &mdash; never leaves your browser except to api.anthropic.com.</div>
+  </div>
+  <button class="btn-api-set" onclick="openSettings()">Add API Key</button>
+</div>
+
+<div class="save-bar">
+  <div class="save-status"><div class="save-dot"></div><span id="saveStatus">Auto-save ON &middot; Initializing...</span></div>
+  <div class="save-actions">
+    <button class="btn sm sec" onclick="exportData()">&#128229; Export JSON</button>
+    <button class="btn sm sec" onclick="importData()">&#128228; Import JSON</button>
+    <button class="btn sm suc" onclick="saveNow()">&#128190; Save Now</button>
+  </div>
+</div>
+
+<div class="cmd-box">
+  <div class="cmd-label">&#9000;&#65039; Command Interface &mdash; AI-Powered &mdash; Press Enter or Run</div>
+  <div class="cmd-row">
+    <input type="text" class="cmd-input" id="cmdInput" placeholder="'Run Grind Finder on my invoices' &middot; 'PBJ my SaaS idea' &middot; 'Analyze BIS P1 decision' &middot; 'What is my net worth gap?'" onkeypress="handleCommand(event)">
+    <button class="cmd-send" onclick="runCommand()">&rarr; Run</button>
+  </div>
+  <div class="cmd-modes">
+    <div class="mode-pill active" data-mode="ai">&#129302; AI Mode</div>
+    <div class="mode-pill" data-mode="grind">&#128269; Grind Finder</div>
+    <div class="mode-pill" data-mode="pbj">&#9878;&#65039; PBJ</div>
+    <div class="mode-pill" data-mode="web">&#127758; Web Search</div>
+    <div class="mode-pill" data-mode="calc">&#129518; Net Worth</div>
+  </div>
+  <div class="ai-response" id="aiResponse">
+    <div class="ai-hdr" id="aiHdr"><div class="spinner"></div><span>CLAUDE IS THINKING...</span></div>
+    <div id="aiText"></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showPage(0)">&#128176; Overview</div>
+  <div class="tab" onclick="showPage(1)">&#127919; Money-Fuck</div>
+  <div class="tab" onclick="showPage(2)">&#128202; Portfolios</div>
+  <div class="tab" onclick="showPage(3)">&#128269; Grind Finder</div>
+  <div class="tab" onclick="showPage(4)">&#9889; Bottlenecks</div>
+  <div class="tab" onclick="showPage(5)">&#127922; Decisions</div>
+  <div class="tab" onclick="showPage(6)">&#128161; Ideas</div>
+</div>
+
+<!-- PAGE 0: OVERVIEW -->
+<div class="page active">
+<div class="grid grid-4">
+  <div class="card stat" onclick="drillInto('networth')">
+    <div class="card-label">&#128176; Net Worth</div>
+    <div class="card-val" id="nwDisplay">$258K</div>
+    <div class="prog"><div class="prog-fill" id="nwProg" style="width:65%"></div></div>
+    <div class="card-sub" id="nwSub">65% toward $400K target (EOY 2026)</div>
+  </div>
+  <div class="card success" onclick="showPage(2)">
+    <div class="card-label">&#128200; BIS &mdash; Bottleneck Plays</div>
+    <div class="card-val">$150K</div>
+    <span class="badge g">+$300 +0.2%</span>
+    <div class="card-sub">60 tickers &middot; 15 plays &middot; All protected</div>
+  </div>
+  <div class="card danger" onclick="showPage(2)">
+    <div class="card-label">&#128737;&#65039; SID &mdash; Infrastructure</div>
+    <div class="card-val">$108K</div>
+    <span class="badge r">-$3.3K -2.97%</span>
+    <div class="card-sub">18 tickers &middot; RKLB +85% &middot; Power down</div>
+  </div>
+  <div class="card warning" onclick="activateCryo()">
+    <div class="card-label">&#129514; CRYO &mdash; 10-Year</div>
+    <div class="card-val">$0</div>
+    <span class="badge y">$250K Target 2036</span>
+    <button class="btn suc sm w-full mt-2" onclick="event.stopPropagation();activateCryo()">Activate Now</button>
+  </div>
+</div>
+<div class="grid grid-3">
+  <div class="card danger">
+    <div class="card-label">&#128680; Critical Actions &mdash; Do Now</div>
+    <div class="li" onclick="fixAction('bis-data')"><div class="li-title">1. Fix BIS Data Mismatch</div><div class="li-desc">Tracker shows $150K deployed. You said $0. Which is real?</div></div>
+    <div class="li" onclick="fixAction('dsy')"><div class="li-title">2. Kill DSY (Down 90%)</div><div class="li-desc">Sell all shares. Reallocate 50% SNPS, 50% CDNS.</div></div>
+    <div class="li" onclick="fixAction('acc610')"><div class="li-title">3. ACC 610 Assignment</div><div class="li-desc">Due Sunday May 26. Not started. Start NOW.</div></div>
+  </div>
+  <div class="card">
+    <div class="card-label">&#128236; Inbox SNR Filter</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0">
+      <div><div style="font-size:9px;color:var(--text3);margin-bottom:4px;letter-spacing:1px">SIGNAL</div><div style="font-size:34px;font-weight:800;color:var(--green)">3</div></div>
+      <div><div style="font-size:9px;color:var(--text3);margin-bottom:4px;letter-spacing:1px">NOISE</div><div style="font-size:34px;font-weight:800;color:var(--red)">7</div></div>
+    </div>
+    <div class="prog"><div class="prog-fill" style="width:30%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+    <div class="card-sub">30% signal &middot; Target: 80%</div>
+    <button class="btn sm w-full mt-2" onclick="window.open('https://mail.google.com','_blank')">Process Inbox &rarr;</button>
+  </div>
+  <div class="card warning">
+    <div class="card-label">&#9889; Top Bottleneck</div>
+    <div class="card-val" style="font-size:26px">BIS P1</div>
+    <div class="card-sub">Semiconductor Dominance. Approved 3 weeks ago. Still not activated.<br><br><strong style="color:var(--yellow)">Missing:</strong> Capital deployment decision.</div>
+    <button class="btn dan sm w-full mt-2" onclick="activateP1()">Activate P1 NOW ($10K)</button>
+  </div>
+</div>
+</div>
+
+<!-- PAGE 1: MONEY-FUCK -->
+<div class="page">
+<div class="card" style="margin-bottom:16px">
+  <div class="card-label">&#127919; The Money-Fuck Model &mdash; Michael Gregory</div>
+  <p style="font-size:13px;color:var(--text2);margin:10px 0 16px;line-height:1.7">The intersection of what you're insanely good at, what moves capital, and what doesn't destroy you. Everything else is noise.</p>
+</div>
+<div class="venn">
+  <div class="vc c1" onclick="showModal('What You Are Insanely Good At','Operations &middot; Pattern Recognition &middot; Flow Repair &middot; Bottleneck Diagnosis &middot; Systems Thinking &middot; Grind Finder &middot; Process Design &middot; Leadership &middot; ITSM &middot; Execution Under Pressure')">WHAT YOU&apos;RE INSANELY GOOD AT</div>
+  <div class="vc c2" onclick="showModal('What Moves Capital','High-Margin Consulting &middot; Fractional COO &middot; ITSM Implementation &middot; Process Automation &middot; SaaS Products &middot; Grind Finder as a Service &middot; Operational Turnarounds &middot; Speaking')">WHAT MOVES CAPITAL</div>
+  <div class="vc c3" onclick="showModal('What Doesn\'t Destroy You','Solving real operational problems. Seeing patterns others miss. Fixing broken flows. Building systems that outlast you. Working with operators who actually want to improve.')">WHAT DOESN&apos;T DESTROY YOU</div>
+  <div class="vo center" onclick="showModal('The Money-Fuck Zone','Fractional COO / Operational Consultant for broken mid-market companies.\n\nYou walk in, find the grind, fix the flow, build the system, and leave it running without you.\n\nThat is the zone. That is the positioning. That is the money.')">&#128176; THE MONEY-FUCK ZONE</div>
+  <div class="vo" style="top:88px;left:50%;transform:translateX(-50%)">Pattern + Capital</div>
+  <div class="vo" style="bottom:110px;left:30px">Strength + Fit</div>
+  <div class="vo" style="bottom:110px;right:30px">Capital + Fit</div>
+</div>
+<div class="grid grid-3">
+  <div class="card"><div class="card-label">&#128226; Positioning Line</div><div style="font-size:12px;line-height:1.7;color:var(--text2);font-style:italic;margin-top:8px">"My strength is finding the grind inside broken operations. I identify recurring friction, ownership gaps, bottlenecks, bad handoffs, hidden success patterns, and repeated failure loops &mdash; then turn them into cleaner process, better routing, stronger accountability, and repeatable execution."</div></div>
+  <div class="card"><div class="card-label">&#9889; Short Version</div><div class="card-val" style="font-size:24px">Find the Grind.<br>Fix the Flow.</div><div class="card-sub">Every job interview. Every consulting pitch. Every first meeting. Start here.</div></div>
+  <div class="card"><div class="card-label">&#127919; 2026 Revenue Target</div><div class="card-val">$180K</div><div class="prog"><div class="prog-fill" style="width:28%"></div></div><div class="card-sub">$50K billed YTD &middot; 28% &middot; Next: Land P1 consulting deal</div></div>
+</div>
+</div>
+
+<!-- PAGE 2: PORTFOLIOS -->
+<div class="page">
+<div class="grid grid-2">
+  <div class="card success">
+    <div class="card-label">&#128200; BIS &mdash; Bottleneck Infrastructure Stocks</div>
+    <div class="card-val">$150,300</div>
+    <span class="badge g">+$300 +0.2%</span>
+    <div class="prog"><div class="prog-fill" style="width:60%"></div></div>
+    <div class="card-sub">60 tickers &middot; 15 active plays &middot; $250K target EOY</div>
+    <div class="mt-2">
+      <div class="li"><div class="li-title">&#9888;&#65039; P1: Semiconductor Dominance</div><div class="li-desc">$10K approved 3 weeks ago. ASML / SNPS / CDNS / KLAC / AMAT. NOT DEPLOYED.</div></div>
+      <div class="li" onclick="fixAction('dsy')"><div class="li-title">&#128308; DSY &mdash; KILL ORDER</div><div class="li-desc">Down 90%. Reallocate: 50% SNPS, 50% CDNS immediately.</div></div>
+    </div>
+  </div>
+  <div class="card danger">
+    <div class="card-label">&#128737;&#65039; SID &mdash; Strategic Infrastructure Defense</div>
+    <div class="card-val">$107,700</div>
+    <span class="badge r">-$3,300 -2.97%</span>
+    <div class="prog"><div class="prog-fill" style="width:43%;background:linear-gradient(90deg,var(--red),var(--yellow))"></div></div>
+    <div class="card-sub">18 tickers &middot; RKLB +85% &middot; Power sector down</div>
+    <div class="mt-2">
+      <div class="li"><div class="li-title">&#128640; RKLB &mdash; Rocket Lab</div><div class="li-desc">+85%. Consider partial harvest. Set stop-loss.</div></div>
+      <div class="li"><div class="li-title">&#9889; Power Sector Drag</div><div class="li-desc">ETN / GEV / PWR all down. Hold or add on weakness?</div></div>
+    </div>
+  </div>
+</div>
+<div class="card warning">
+  <div class="card-label">&#129514; CRYO &mdash; 10-Year Conviction Play</div>
+  <div class="card-val">$0 deployed</div>
+  <span class="badge y">$250,000 Target &middot; 2036 Horizon</span>
+  <div class="card-sub mt-2">Activation plan: $10K seed &middot; Power (ETN, GEV, PWR, VRT = $6K) &middot; Ocean/Subsea (TDY, IRDM, SPGI = $3K) &middot; Dry powder ($1K)</div>
+  <button class="btn suc mt-2" onclick="activateCryo()">&#129514; Activate CRYO &mdash; Deploy $10K</button>
+</div>
+</div>
+
+<!-- PAGE 3: GRIND FINDER -->
+<div class="page">
+<div class="card" style="margin-bottom:14px">
+  <div class="card-label">&#128269; Grind Finder&trade; &mdash; Universal Pattern &amp; Bottleneck Detection</div>
+  <p style="font-size:12px;color:var(--text2);margin:8px 0;line-height:1.7">Describe any system, process, workflow, or situation. Grind Finder diagnoses the pattern, finds the bottleneck, scores the constraint, and recommends action.</p>
+  <textarea id="grindInput" class="modal-input" style="min-height:110px" placeholder="Examples:&#10;My ITSM Network Queue keeps becoming a catch-all&#10;Sales leads go cold after the first call&#10;Invoices sit unapproved for 2 weeks&#10;I can't finish projects start to finish&#10;The same customer complaint keeps coming back"></textarea>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+    <button class="btn" onclick="runGrindFinder()">&#128269; Find the Grind</button>
+    <button class="btn sec" onclick="runGrindQuick()">&#9889; Quick Scan</button>
+    <button class="btn sec" onclick="document.getElementById('grindInput').value='';document.getElementById('grindOut').classList.remove('show')">&#10005; Clear</button>
+  </div>
+  <div class="grind-out" id="grindOut"><div id="grindText"></div></div>
+</div>
+<div class="grid grid-3">
+  <div class="card"><div class="card-label">&#9889; Grind Type Reference</div><div style="font-size:10px;color:var(--text2);line-height:2.1"><div>&#128308; Ownership &mdash; nobody owns the next action</div><div>&#128993; Routing &mdash; work lands in wrong place</div><div>&#128994; Decision &mdash; nothing moves, nobody decides</div><div>&#128992; Capacity &mdash; system or person overloaded</div><div>&#9898; Visibility &mdash; can't see status or next action</div><div>&#128309; Design &mdash; process creates unnecessary friction</div></div></div>
+  <div class="card"><div class="card-label">&#128202; Priority Scoring</div><div style="font-size:11px;color:var(--text2);line-height:2.2"><div><strong style="color:var(--blue-bright)">Priority</strong> = Frequency &times; Impact &times; Fixability</div><div><strong style="color:var(--red)">Escalation</strong> = Frequency &times; Impact &times; Risk</div><div><strong style="color:var(--green)">Opportunity</strong> = Leverage &times; Replicability &times; Value</div><div style="margin-top:8px;font-size:10px;color:var(--text3)">Chase highest leverage, not biggest problem.</div></div></div>
+  <div class="card"><div class="card-label">&#128196; Saved Grinds</div><div class="li"><div class="li-title">BIS P1 Deployment Grind</div><div class="li-desc">Decision Grind &middot; Saved May 2026</div></div><div class="li"><div class="li-title">Network Queue Catch-All</div><div class="li-desc">Routing + Ownership Grind</div></div></div>
+</div>
+</div>
+
+<!-- PAGE 4: BOTTLENECKS -->
+<div class="page">
+<div class="grid grid-3">
+  <div class="card danger"><div class="card-label">&#128308; P0 &mdash; Critical Now</div><div class="li"><div class="li-title">BIS Capital Deployment</div><div class="li-desc">Decision Grind &middot; 3 weeks stalled &middot; $10K authorized &middot; Not deployed</div></div><div class="li"><div class="li-title">DSY Kill Order</div><div class="li-desc">Down 90% &middot; Holding dead position &middot; Costs opportunity daily</div></div><div class="li" onclick="fixAction('acc610')"><div class="li-title">ACC 610 Assignment</div><div class="li-desc">Due May 26 &middot; Not started &middot; Memory + Discipline Grind</div></div></div>
+  <div class="card warning"><div class="card-label">&#128993; P1 &mdash; This Week</div><div class="li" onclick="fixAction('bis-data')"><div class="li-title">BIS Data Reconciliation</div><div class="li-desc">Visibility Grind &middot; $150K tracker vs $0 reality</div></div><div class="li"><div class="li-title">CRYO Activation Plan</div><div class="li-desc">Design Grind &middot; Has plan, no execution trigger</div></div><div class="li"><div class="li-title">Inbox Signal/Noise</div><div class="li-desc">Capacity Grind &middot; 30% signal &middot; Target 80%</div></div></div>
+  <div class="card"><div class="card-label">&#9898; P2 &mdash; This Month</div><div class="li"><div class="li-title">Revenue Pipeline</div><div class="li-desc">Routing Grind &middot; No active consulting deal in pipeline</div></div><div class="li"><div class="li-title">RKLB Harvest Decision</div><div class="li-desc">Decision Grind &middot; +85% &middot; No stop-loss set</div></div><div class="li"><div class="li-title">SID Power Sector Review</div><div class="li-desc">Pattern review on down positions</div></div></div>
+</div>
+<div class="card mt-2">
+  <div class="card-label">&#10133; Add New Bottleneck</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-top:10px">
+    <input type="text" class="modal-input" id="newBotTitle" placeholder="Bottleneck name...">
+    <select class="modal-input" id="newBotPriority" style="cursor:pointer"><option value="p0">P0 &mdash; Critical</option><option value="p1">P1 &mdash; This Week</option><option value="p2">P2 &mdash; This Month</option></select>
+    <input type="text" class="modal-input" id="newBotDesc" placeholder="Describe the grind...">
+  </div>
+  <button class="btn mt-1" onclick="addBottleneck()">+ Add Bottleneck</button>
+</div>
+</div>
+
+<!-- PAGE 5: DECISIONS -->
+<div class="page">
+<div class="grid grid-2">
+  <div class="card danger"><div class="card-label">&#128308; Decide Today</div><div class="li"><div class="li-title">Deploy BIS P1 &mdash; $10K Semiconductor</div><div class="li-desc">ASML 30% &middot; SNPS 20% &middot; CDNS 20% &middot; KLAC 15% &middot; AMAT 15%<br><span style="color:var(--yellow);font-size:10px">Blocking: Stale decision, zero opportunity cost visible</span></div></div><div class="li" onclick="fixAction('dsy')"><div class="li-title">Kill DSY Position</div><div class="li-desc">-90% loss confirmed. Hold or sell?<br><span style="color:var(--red);font-size:10px">Every day you hold: paying opportunity cost</span></div></div></div>
+  <div class="card warning"><div class="card-label">&#128993; Decide This Week</div><div class="li"><div class="li-title">Activate CRYO</div><div class="li-desc">$10K seed &middot; Full plan exists &middot; Missing: execution date</div></div><div class="li"><div class="li-title">RKLB &mdash; Harvest or Hold?</div><div class="li-desc">+85% gain. No stop-loss set. Define your exit thesis.</div></div><div class="li"><div class="li-title">Consulting Pipeline</div><div class="li-desc">Who are the 3 target companies for Grind Finder outreach?</div></div></div>
+</div>
+<div class="card mt-2">
+  <div class="card-label">&#129302; AI Decision Analysis &mdash; Ask Claude</div>
+  <input type="text" class="modal-input" id="decisionInput" placeholder="Describe your decision: 'Should I sell RKLB at +85% or hold for $50?'">
+  <button class="btn mt-1" onclick="analyzeDecision()">&#129504; Analyze with Claude</button>
+  <div class="grind-out" id="decisionOut"></div>
+</div>
+</div>
+
+<!-- PAGE 6: IDEAS -->
+<div class="page">
+<div class="card">
+  <div class="card-label">&#128161; Idea Pipeline &mdash; Vote, Rank, Launch</div>
+  <div id="ideaList">
+    <div class="idea" id="idea-0"><button class="vote" onclick="voteIdea(0)">&#9650; 12</button><span class="cat">SaaS</span><span class="cat">B2B</span><div class="li-title">Grind Finder&trade; as a SaaS Product</div><div class="li-desc">Subscription diagnostic tool for ops leaders. Monthly recurring revenue. Low-code MVP possible.</div></div>
+    <div class="idea" id="idea-1"><button class="vote" onclick="voteIdea(1)">&#9650; 8</button><span class="cat">Consulting</span><div class="li-title">Fractional COO Service &mdash; 90-Day Operational Fix</div><div class="li-desc">Walk into broken mid-market company. Find the grind. Fix the flow. Exit with a running system. $30&ndash;60K engagement.</div></div>
+    <div class="idea" id="idea-2"><button class="vote" onclick="voteIdea(2)">&#9650; 6</button><span class="cat">Content</span><div class="li-title">Grind Finder Substack / Newsletter</div><div class="li-desc">Weekly: find one operational grind, diagnose it publicly, show the fix. Build authority + consulting pipeline.</div></div>
+    <div class="idea" id="idea-3"><button class="vote" onclick="voteIdea(3)">&#9650; 5</button><span class="cat">ITSM</span><div class="li-title">ITSM Network Queue Diagnostic Kit</div><div class="li-desc">Productized checklist + training for teams drowning in catch-all routing problems. $500&ndash;2K per team.</div></div>
+  </div>
+  <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+    <div class="card-label">&#10133; New Idea</div>
+    <input type="text" class="modal-input" id="newIdeaTitle" placeholder="Idea title...">
+    <input type="text" class="modal-input" id="newIdeaDesc" placeholder="One-line description...">
+    <button class="btn mt-1" onclick="addIdea()">+ Add Idea</button>
+  </div>
+</div>
+</div>
+
+</div><!-- /shell -->
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">&#215;</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div id="modalExtra"></div>
+    <button class="btn w-full" onclick="closeModal()">Close</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeSettings()">&#215;</button>
+    <div class="modal-title">&#9881;&#65039; Settings</div>
+    <div class="settings-row">
+      <div style="flex:1">
+        <div class="settings-label">&#128273; Claude API Key</div>
+        <div class="settings-sub">Stored in browser localStorage only. Never sent anywhere except api.anthropic.com.</div>
+        <input type="password" class="modal-input mt-1" id="apiKeyInput" placeholder="sk-ant-api03-...">
+      </div>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">&#128190; Auto-Save</div><div class="settings-sub">Save data to localStorage every 30 seconds</div></div>
+      <label class="toggle"><input type="checkbox" id="togAutoSave" checked onchange="toggleSetting('autoSave',this.checked)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">&#127921; Ticker Animation</div><div class="settings-sub">Scrolling ticker bar at top</div></div>
+      <label class="toggle"><input type="checkbox" id="togTicker" checked onchange="toggleSetting('showTicker',this.checked)"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="settings-row">
+      <div><div class="settings-label">&#10024; Particle Effects</div><div class="settings-sub">Animated background particles</div></div>
+      <label class="toggle"><input type="checkbox" id="togParticles" checked onchange="toggleSetting('showParticles',this.checked)"><span class="toggle-slider"></span></label>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
+      <button class="btn suc" onclick="saveApiKey()">Save API Key</button>
+      <button class="btn sec" onclick="clearAllData()">&#128465;&#65039; Clear All Data</button>
+      <button class="btn sec" onclick="closeSettings()">Close</button>
+    </div>
+    <div style="margin-top:14px;padding:11px;background:rgba(6,8,16,0.7);border-radius:9px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;line-height:2">
+      GitHub Repo: github.com/Mgregory2K/michael-command-center<br>
+      GitHub Pages URL: mgregory2k.github.io/michael-command-center/dashboard.html<br>
+      Model: claude-sonnet-4-6 &middot; v2.0 &middot; May 2026
+    </div>
+  </div>
+</div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<!-- GITHUB SETUP BUTTON -->
+<div style="position:fixed;bottom:18px;right:18px;z-index:500">
+  <button class="btn sm sec" onclick="showGithubSetup()" style="box-shadow:0 4px 14px rgba(0,0,0,0.5)">&#128024; GitHub Setup</button>
+</div>
+
+<script>
+const MODEL='claude-sonnet-4-6';
+const LS='mgcc_v2';
+let S={apiKey:'',autoSave:true,showTicker:true,showParticles:true,netWorth:258000,nwTarget:400000,ideas:[],bottlenecks:[],lastSaved:null};
+
+function init(){loadS();buildParticles();buildTicker();startClock();checkKey();startAutoSave();applyS()}
+
+function loadS(){try{const r=localStorage.getItem(LS);if(r)S={...S,...JSON.parse(r)}}catch(e){}}
+function saveS(){try{S.lastSaved=new Date().toISOString();localStorage.setItem(LS,JSON.stringify(S));updateSaveStatus()}catch(e){}}
+function applyS(){
+  document.getElementById('togAutoSave').checked=S.autoSave;
+  document.getElementById('togTicker').checked=S.showTicker!==false;
+  document.getElementById('togParticles').checked=S.showParticles!==false;
+  if(S.showTicker===false)document.querySelector('.ticker-wrap').style.display='none';
+  if(S.showParticles===false)document.getElementById('particles').style.display='none';
+  if(S.apiKey)document.getElementById('apiKeyInput').value=S.apiKey;
+  updateNW();
+}
+function checkKey(){if(S.apiKey&&S.apiKey.startsWith('sk-ant'))document.getElementById('apiBanner').classList.add('hidden')}
+function startClock(){function t(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}t();setInterval(t,1000)}
+function buildParticles(){const el=document.getElementById('particles'),c=['#3B82F6','#7C3AED','#06B6D4','#10B981'];for(let i=0;i<26;i++){const p=document.createElement('div');p.className='pt';p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2.5+1}px;height:${Math.random()*2.5+1}px;background:${c[Math.floor(Math.random()*c.length)]};animation-delay:${Math.random()*20}s;animation-duration:${14+Math.random()*14}s;opacity:${Math.random()*0.35+0.08}`;el.appendChild(p)}}
+const TICKS=[{sym:'BIS',val:'$150,300',chg:'+0.20%',up:true},{sym:'SID',val:'$107,700',chg:'-2.97%',up:false},{sym:'CRYO',val:'$0',chg:'TARGET 2036',up:true},{sym:'RKLB',val:'SID',chg:'+85.0%',up:true},{sym:'DSY',val:'KILL',chg:'-90.0%',up:false},{sym:'ASML',val:'P1 TARGET',chg:'BUY',up:true},{sym:'SNPS',val:'P1 TARGET',chg:'BUY',up:true},{sym:'CDNS',val:'P1 TARGET',chg:'BUY',up:true},{sym:'KLAC',val:'P1 TARGET',chg:'BUY',up:true},{sym:'AMAT',val:'P1 TARGET',chg:'BUY',up:true},{sym:'ETN',val:'CRYO',chg:'HOLD',up:true},{sym:'NET WORTH',val:'$258K',chg:'$400K TARGET',up:true},{sym:'BIS P1',val:'$10K',chg:'UNDEPLOYED',up:false},{sym:'ACC610',val:'DUE',chg:'MAY 26',up:false},{sym:'GRIND FINDER',val:'v0.1',chg:'ACTIVE',up:true},{sym:'PBJ MODE',val:'READY',chg:'ONLINE',up:true}];
+function buildTicker(){function m(t){return`<span class="tick"><span class="tick-sym">${t.sym}</span><span class="tick-val">${t.val}</span><span class="tick-chg ${t.up?'up':'dn'}">${t.chg}</span></span><span class="tick-sep">|</span>`}document.getElementById('ticker').innerHTML=TICKS.map(m).join('')+TICKS.map(m).join('')}
+function showPage(i){document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('active',idx===i));document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i))}
+const pills=document.querySelectorAll('.mode-pill');let activeMode='ai';
+pills.forEach(m=>m.addEventListener('click',()=>{pills.forEach(x=>x.classList.remove('active'));m.classList.add('active');activeMode=m.dataset.mode}));
+function handleCommand(e){if(e.key==='Enter')runCommand()}
+async function runCommand(){
+  const inp=document.getElementById('cmdInput').value.trim();if(!inp)return;
+  if(activeMode==='web'){window.open('https://duckduckgo.com/?q='+encodeURIComponent(inp),'_blank');document.getElementById('cmdInput').value='';return}
+  if(activeMode==='calc'){showModal('Net Worth','BIS: $150,300\nSID: $107,700\nCRYO: $0\nTotal: $258,000\nTarget: $400,000\nGap: $142,000\nProgress: 64.5%');document.getElementById('cmdInput').value='';return}
+  const resp=document.getElementById('aiResponse'),txt=document.getElementById('aiText'),hdr=document.getElementById('aiHdr');
+  resp.classList.add('show');txt.innerHTML='';hdr.style.display='flex';
+  if(!S.apiKey){hdr.style.display='none';txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings to enable AI responses.</span>';return}
+  let sys='';
+  if(activeMode==='grind')sys=grindSys();
+  else if(activeMode==='pbj')sys='You are the PBJ Framework analyst. Analyze every idea through PAIN (what problem, how intense, how frequent), BUYER (who pays, can they afford it, buying trigger), JUSTIFICATION (why now, cost of inaction). Give a PBJ Score 1-10 and a one-sentence verdict. Be sharp and direct.';
+  else sys='You are Michael Gregory\'s Command Center AI. Context: Grind Finder owner, portfolios BIS $150K / SID $108K / CRYO $0, net worth $258K toward $400K EOY 2026, BIS P1 semiconductor play $10K undeployed, DSY kill order -90%, ACC 610 due May 26, goal: Fractional COO consulting + Grind Finder as product, $180K revenue 2026. Answer as a sharp operational advisor. Maximum signal per word.';
+  await callClaude(sys,inp,txt,hdr);
+  document.getElementById('cmdInput').value='';
+}
+function grindSys(){return`You are Grind Finder(tm). Diagnose broken systems and produce this exact structure:\n\nGRIND TYPE: [Ownership/Routing/Decision/Skill/Incentive/Visibility/Tool/Handoff/Capacity/Discipline/Design/Expectation/Memory/Authority/Policy/Vendor/Customer]\nCORE LOOP: Trigger > Path > Friction > Workaround > Outcome > Repeat\nVARIANCE TYPE: [Normal/Warning/Failure/Leverage]\nBOTTLENECK: where does flow slow/stop/bounce/fail?\nCONSTRAINTS: list relevant constraints\nROOT CAUSE HYPOTHESES: 1. 2. 3.\nGOOD PATTERN TO REPLICATE: what already works?\nRECOMMENDED ACTION: Replicate/Fix/Reroute/Automate/Train/Clarify/Retire/Ignore/Exploit\nLOW-COST FIX: with existing resources?\nPRIORITY SCORE: Frequency(1-5) x Impact(1-5) x Fixability(1-5) = total\nCONFIDENCE: Low/Medium/High\n\nBe sharp, concrete, diagnostic. No filler.`}
+async function runGrindFinder(){
+  const inp=document.getElementById('grindInput').value.trim();if(!inp)return;
+  const out=document.getElementById('grindOut'),txt=document.getElementById('grindText');
+  out.classList.add('show');txt.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>ANALYZING THE GRIND...</span></div>';
+  if(!S.apiKey){txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings to enable AI analysis.</span>';return}
+  await callClaude(grindSys(),'Find the Grind: '+inp,txt,null);
+}
+async function runGrindQuick(){
+  const inp=document.getElementById('grindInput').value.trim();if(!inp)return;
+  const out=document.getElementById('grindOut'),txt=document.getElementById('grindText');
+  out.classList.add('show');txt.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>QUICK SCAN...</span></div>';
+  if(!S.apiKey){txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings.</span>';return}
+  await callClaude('You are Grind Finder. Give a 3-line rapid diagnosis: 1) Grind Type, 2) Root Cause, 3) One immediate action. Brutally concise.',inp,txt,null,400);
+}
+async function analyzeDecision(){
+  const inp=document.getElementById('decisionInput').value.trim();if(!inp)return;
+  const out=document.getElementById('decisionOut');
+  out.classList.add('show');out.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>ANALYZING...</span></div>';
+  if(!S.apiKey){out.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings.</span>';return}
+  await callClaude('You are Michael\'s decision advisor. Analyze through: 1) What does data say? 2) Cost of delay? 3) Risk of acting? 4) Recommended action. Sharp, direct, no hedge-speak.',inp,out,null,600);
+}
+async function callClaude(sys,msg,el,hdrEl,maxTok=1000){
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL,max_tokens:maxTok,system:sys,messages:[{role:'user',content:msg}]})});
+    const d=await r.json();
+    if(hdrEl)hdrEl.style.display='none';
+    if(d.content&&d.content[0]){el.innerHTML='';streamText(el,d.content[0].text)}
+    else el.innerHTML='<span style="color:var(--red)">Error: '+(d.error?.message||'Unknown')+'</span>';
+  }catch(e){if(hdrEl)hdrEl.style.display='none';el.innerHTML='<span style="color:var(--red)">Error: '+e.message+'</span>'}
+}
+function streamText(el,text){el.innerHTML='';const cur=document.createElement('span');cur.className='typing-cursor';el.appendChild(cur);let i=0;function t(){if(i<text.length){cur.insertAdjacentText('beforebegin',text[i]);i++;setTimeout(t,7)}else cur.remove()}t()}
+function showModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').textContent=body;document.getElementById('modalExtra').innerHTML='';document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function openSettings(){document.getElementById('settingsModal').classList.add('show')}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('show')}
+function saveApiKey(){const k=document.getElementById('apiKeyInput').value.trim();if(k){S.apiKey=k;saveS();checkKey();closeSettings();showModal('API Key Saved','Your Claude API key is stored locally in your browser.\n\nIt is never sent anywhere except api.anthropic.com when you run an AI query.\n\nAll AI features are now active.')}}
+function toggleSetting(key,val){S[key]=val;if(key==='showTicker')document.querySelector('.ticker-wrap').style.display=val?'':'none';if(key==='showParticles')document.getElementById('particles').style.display=val?'':'none';saveS()}
+function clearAllData(){if(confirm('Clear ALL saved data? This cannot be undone.')){localStorage.removeItem(LS);location.reload()}}
+function saveNow(){saveS();const b=event.target;b.textContent='Saved!';setTimeout(()=>b.textContent='Save Now',2000)}
+function updateSaveStatus(){const el=document.getElementById('saveStatus');if(S.lastSaved){const d=new Date(S.lastSaved);el.textContent='Auto-save ON \u00b7 Last saved: '+d.toLocaleTimeString()}else el.textContent='Auto-save ON \u00b7 Ready'}
+function startAutoSave(){setInterval(()=>{if(S.autoSave)saveS()},30000)}
+function exportData(){const b=new Blob([JSON.stringify(S,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='mgcc-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click()}
+function importData(){document.getElementById('importFile').click()}
+function handleImport(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=function(ev){try{const im=JSON.parse(ev.target.result);S={...S,...im};saveS();applyS();showModal('Import Successful','Data imported. Dashboard updated.')}catch(err){showModal('Import Failed','Could not parse the JSON file.')}};r.readAsText(f)}
+function updateNW(){const p=Math.round((S.netWorth/S.nwTarget)*100);document.getElementById('nwDisplay').textContent='$'+Math.round(S.netWorth/1000)+'K';document.getElementById('nwProg').style.width=p+'%';document.getElementById('nwSub').textContent=p+'% toward $'+Math.round(S.nwTarget/1000)+'K target (EOY 2026)'}
+function drillInto(t){if(t==='networth')showModal('Net Worth Breakdown','BIS: $150,300 (+$300 +0.2%)\nSID: $107,700 (-$3,300 -2.97%)\nCRYO: $0 ($250K target 2036)\n\nTotal: $258,000\nTarget: $400,000 (EOY 2026)\nProgress: 64.5%\nGap: $142,000');else showPage(2)}
+function activateCryo(){showModal('Activate CRYO','Activation Plan: $10,000 Initial Deploy\n\nPower Infrastructure (60% = $6,000):\nETN, GEV, PWR, VRT\n\nOcean/Subsea (30% = $3,000):\nTDY, IRDM, SPGI\n\nDry Powder: $1,000\n\n10-Year Horizon: 2036\nTarget: $250,000')}
+function fixAction(a){if(a==='bis-data')showModal('Fix BIS Data Discrepancy','Tracker: $150,300 across 60 tickers\nYou said: $0\n\nAction:\n1. Log into E*TRADE\n2. Check actual deployed balance\n3. If REAL: update memory and confirm positions\n4. If PLACEHOLDER: clear tracker, start fresh\n\nGrind Type: Visibility Grind\nPriority: P0');else if(a==='dsy')showModal('DSY Kill Order','Status: -90% loss\n\nAction: Sell ALL shares immediately\n\nReallocation:\n50% SNPS (Synopsys)\n50% CDNS (Cadence Design)\n\nGrind Type: Incentive Grind\nCost of delay: Opportunity cost compounding daily');else if(a==='acc610')showModal('ACC 610 Assignment','Due: Sunday, May 26, 2026\nStatus: NOT STARTED\n\nAction: Open Canvas/Blackboard NOW\n\nGrind Type: Discipline Grind\nConstraint: Memory + attention\nFix: Block 2 hours today. Nothing else until started.')}
+function activateP1(){showModal('BIS P1 — Semiconductor Dominance','$10,000 Deployment Plan:\n\nASML (30%) — $3,000\nSNPS (20%) — $2,000\nCDNS (20%) — $2,000\nKLAC (15%) — $1,500\nAMAT (15%) — $1,500\n\nThesis: Semiconductor dominance. These companies build the tools that make the chips that run everything.\n\nApproved: 3 weeks ago\nStatus: UNDEPLOYED\nAction: Deploy today.')}
+function addBottleneck(){const t=document.getElementById('newBotTitle').value.trim(),d=document.getElementById('newBotDesc').value.trim(),p=document.getElementById('newBotPriority').value;if(!t)return;S.bottlenecks.push({title:t,desc:d,priority:p,created:new Date().toISOString()});saveS();document.getElementById('newBotTitle').value='';document.getElementById('newBotDesc').value='';showModal('Bottleneck Added','"'+t+'" saved. Use Grind Finder to run a full diagnosis.')}
+function voteIdea(i){const c=document.getElementById('idea-'+i),b=c.querySelector('.vote'),n=parseInt(b.textContent.replace('\u25b2 ',''));b.textContent='\u25b2 '+(n+1);c.classList.toggle('voted')}
+function addIdea(){const t=document.getElementById('newIdeaTitle').value.trim(),d=document.getElementById('newIdeaDesc').value.trim();if(!t)return;const l=document.getElementById('ideaList'),idx=l.children.length;const div=document.createElement('div');div.className='idea';div.id='idea-'+idx;div.innerHTML=`<button class="vote" onclick="voteIdea(${idx})">\u25b2 0</button><div class="li-title">${t}</div><div class="li-desc">${d}</div>`;l.appendChild(div);document.getElementById('newIdeaTitle').value='';document.getElementById('newIdeaDesc').value='';S.ideas.push({title:t,desc:d,votes:0});saveS()}
+function showGithubSetup(){showModal('GitHub Pages Setup — 5 Minutes','STEP 1: Create repo\ngithub.com/new\nName: michael-command-center\nVisibility: Public\nDo NOT add README\n\nSTEP 2: Upload this file\nDrag dashboard.html onto the repo page\nCommit directly to main\n\nSTEP 3: Enable GitHub Pages\nSettings > Pages\nSource: Deploy from branch\nBranch: main / (root)\nClick Save\n\nSTEP 4: Bookmark this URL:\nhttps://Mgregory2K.github.io/michael-command-center/dashboard.html\n\nSTEP 5: Update anytime\nEdit dashboard.html > commit > live in ~60 seconds\n\nTotal: ~5 minutes. Browser-independent. Zero cost.')}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeSettings()}if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();document.getElementById('cmdInput').focus()}});
+init();
+</script>
+</body>
+</html>
