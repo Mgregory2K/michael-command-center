@@ -39,12 +39,10 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--glow-g);animation:blink 2s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .header-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text2)}
-.api-banner{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(239,68,68,0.07));border:1px solid rgba(245,158,11,0.28);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.api-banner{background:linear-gradient(135deg,rgba(52,211,153,0.1),rgba(16,185,129,0.07));border:1px solid rgba(16,185,129,0.28);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .api-banner.hidden{display:none}
-.api-banner-text{font-size:12px;color:var(--yellow);font-weight:700}
+.api-banner-text{font-size:12px;color:var(--green);font-weight:700}
 .api-banner-sub{font-size:10px;color:var(--text3);margin-top:2px}
-.btn-api-set{padding:7px 14px;background:var(--yellow);border:none;border-radius:8px;color:#000;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
-.btn-api-set:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(245,158,11,0.4)}
 .save-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.18);border-radius:12px;padding:10px 16px;margin-bottom:14px}
 .save-status{font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:6px}
 .save-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite}
@@ -176,10 +174,10 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 
 <div class="api-banner" id="apiBanner">
   <div>
-    <div class="api-banner-text">&#9888;&#65039; Claude API Key Not Set</div>
-    <div class="api-banner-sub">AI Mode, Grind Finder, and PBJ analysis require your key. Stored locally only &mdash; never leaves your browser except to api.anthropic.com.</div>
+    <div class="api-banner-text">&#9989; Vercel Backend Ready</div>
+    <div class="api-banner-sub">After you deploy to Vercel and add your Claude API key, all AI features will be active. Check Settings for backend status.</div>
   </div>
-  <button class="btn-api-set" onclick="openSettings()">Add API Key</button>
+  <button class="btn-api-set" onclick="openSettings()">Settings</button>
 </div>
 
 <div class="save-bar">
@@ -192,9 +190,9 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 </div>
 
 <div class="cmd-box">
-  <div class="cmd-label">&#9000;&#65039; Command Interface &mdash; AI-Powered &mdash; Press Enter or Run</div>
+  <div class="cmd-label">&#9000;&#65039; Command Interface &mdash; AI-Powered via Vercel</div>
   <div class="cmd-row">
-    <input type="text" class="cmd-input" id="cmdInput" placeholder="'Run Grind Finder on my invoices' &middot; 'PBJ my SaaS idea' &middot; 'Analyze BIS P1 decision' &middot; 'What is my net worth gap?'" onkeypress="handleCommand(event)">
+    <input type="text" class="cmd-input" id="cmdInput" placeholder="'Run Grind Finder on my invoices' &middot; 'PBJ my SaaS idea' &middot; 'Analyze my decision' &middot; 'Search web for...'" onkeypress="handleCommand(event)">
     <button class="cmd-send" onclick="runCommand()">&rarr; Run</button>
   </div>
   <div class="cmd-modes">
@@ -334,8 +332,8 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
 <!-- PAGE 3: GRIND FINDER -->
 <div class="page">
 <div class="card" style="margin-bottom:14px">
-  <div class="card-label">&#128269; Grind Finder&trade; &mdash; Universal Pattern &amp; Bottleneck Detection</div>
-  <p style="font-size:12px;color:var(--text2);margin:8px 0;line-height:1.7">Describe any system, process, workflow, or situation. Grind Finder diagnoses the pattern, finds the bottleneck, scores the constraint, and recommends action.</p>
+  <div class="card-label">&#128269; Grind Finder&trade; &mdash; Universal Pattern & Bottleneck Detection</div>
+  <p style="font-size:12px;color:var(--text2);margin:8px 0;line-height:1.7">Describe any system, process, workflow, or situation. Grind Finder diagnoses the pattern, finds the bottleneck, scores the constraint, and recommends action. Results appear in dashboard.</p>
   <textarea id="grindInput" class="modal-input" style="min-height:110px" placeholder="Examples:&#10;My ITSM Network Queue keeps becoming a catch-all&#10;Sales leads go cold after the first call&#10;Invoices sit unapproved for 2 weeks&#10;I can't finish projects start to finish&#10;The same customer complaint keeps coming back"></textarea>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
     <button class="btn" onclick="runGrindFinder()">&#128269; Find the Grind</button>
@@ -345,7 +343,7 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
   <div class="grind-out" id="grindOut"><div id="grindText"></div></div>
 </div>
 <div class="grid grid-3">
-  <div class="card"><div class="card-label">&#9889; Grind Type Reference</div><div style="font-size:10px;color:var(--text2);line-height:2.1"><div>&#128308; Ownership &mdash; nobody owns the next action</div><div>&#128993; Routing &mdash; work lands in wrong place</div><div>&#128994; Decision &mdash; nothing moves, nobody decides</div><div>&#128992; Capacity &mdash; system or person overloaded</div><div>&#9898; Visibility &mdash; can't see status or next action</div><div>&#128309; Design &mdash; process creates unnecessary friction</div></div></div>
+  <div class="card"><div class="card-label">&#128269; Grind Type Reference</div><div style="font-size:10px;color:var(--text2);line-height:2.1"><div>&#128308; Ownership &mdash; nobody owns the next action</div><div>&#128993; Routing &mdash; work lands in wrong place</div><div>&#128994; Decision &mdash; nothing moves, nobody decides</div><div>&#128992; Capacity &mdash; system or person overloaded</div><div>&#9898; Visibility &mdash; can't see status or next action</div><div>&#128309; Design &mdash; process creates unnecessary friction</div></div></div>
   <div class="card"><div class="card-label">&#128202; Priority Scoring</div><div style="font-size:11px;color:var(--text2);line-height:2.2"><div><strong style="color:var(--blue-bright)">Priority</strong> = Frequency &times; Impact &times; Fixability</div><div><strong style="color:var(--red)">Escalation</strong> = Frequency &times; Impact &times; Risk</div><div><strong style="color:var(--green)">Opportunity</strong> = Leverage &times; Replicability &times; Value</div><div style="margin-top:8px;font-size:10px;color:var(--text3)">Chase highest leverage, not biggest problem.</div></div></div>
   <div class="card"><div class="card-label">&#128196; Saved Grinds</div><div class="li"><div class="li-title">BIS P1 Deployment Grind</div><div class="li-desc">Decision Grind &middot; Saved May 2026</div></div><div class="li"><div class="li-title">Network Queue Catch-All</div><div class="li-desc">Routing + Ownership Grind</div></div></div>
 </div>
@@ -422,9 +420,8 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
     <div class="modal-title">&#9881;&#65039; Settings</div>
     <div class="settings-row">
       <div style="flex:1">
-        <div class="settings-label">&#128273; Claude API Key</div>
-        <div class="settings-sub">Stored in browser localStorage only. Never sent anywhere except api.anthropic.com.</div>
-        <input type="password" class="modal-input mt-1" id="apiKeyInput" placeholder="sk-ant-api03-...">
+        <div class="settings-label">&#9989; Vercel Backend Status</div>
+        <div class="settings-sub" id="backendStatus">Waiting for deployment. After you deploy to Vercel and add your Claude API key, this will show "Connected".</div>
       </div>
     </div>
     <div class="settings-row">
@@ -440,31 +437,33 @@ body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-he
       <label class="toggle"><input type="checkbox" id="togParticles" checked onchange="toggleSetting('showParticles',this.checked)"><span class="toggle-slider"></span></label>
     </div>
     <div style="margin-top:18px;display:flex;gap:9px;flex-wrap:wrap">
-      <button class="btn suc" onclick="saveApiKey()">Save API Key</button>
+      <button class="btn suc" onclick="saveSettings()">Save Settings</button>
       <button class="btn sec" onclick="clearAllData()">&#128465;&#65039; Clear All Data</button>
       <button class="btn sec" onclick="closeSettings()">Close</button>
     </div>
     <div style="margin-top:14px;padding:11px;background:rgba(6,8,16,0.7);border-radius:9px;font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;line-height:2">
-      GitHub Repo: github.com/Mgregory2K/michael-command-center<br>
-      GitHub Pages URL: mgregory2k.github.io/michael-command-center/dashboard.html<br>
-      Model: claude-sonnet-4-6 &middot; v2.0 &middot; May 2026
+      GitHub: github.com/Mgregory2K/michael-command-center<br>
+      GitHub Pages: mgregory2k.github.io/michael-command-center/dashboard.html<br>
+      Backend: (Vercel — your URL here after deployment)<br>
+      Model: claude-sonnet-4-6 &middot; v2.2 &middot; May 2026
     </div>
   </div>
 </div>
 
 <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
 
-<!-- GITHUB SETUP BUTTON -->
-<div style="position:fixed;bottom:18px;right:18px;z-index:500">
-  <button class="btn sm sec" onclick="showGithubSetup()" style="box-shadow:0 4px 14px rgba(0,0,0,0.5)">&#128024; GitHub Setup</button>
-</div>
-
 <script>
-const MODEL='claude-sonnet-4-6';
+// ════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════
+const VERCEL_URL = 'https://your-vercel-url.vercel.app'; // UPDATE AFTER DEPLOYMENT
 const LS='mgcc_v2';
-let S={apiKey:'',autoSave:true,showTicker:true,showParticles:true,netWorth:258000,nwTarget:400000,ideas:[],bottlenecks:[],lastSaved:null};
+let S={autoSave:true,showTicker:true,showParticles:true,netWorth:258000,nwTarget:400000,ideas:[],bottlenecks:[],lastSaved:null};
 
-function init(){loadS();buildParticles();buildTicker();startClock();checkKey();startAutoSave();applyS()}
+// ════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════
+function init(){loadS();buildParticles();buildTicker();startClock();startAutoSave();applyS()}
 
 function loadS(){try{const r=localStorage.getItem(LS);if(r)S={...S,...JSON.parse(r)}}catch(e){}}
 function saveS(){try{S.lastSaved=new Date().toISOString();localStorage.setItem(LS,JSON.stringify(S));updateSaveStatus()}catch(e){}}
@@ -474,69 +473,88 @@ function applyS(){
   document.getElementById('togParticles').checked=S.showParticles!==false;
   if(S.showTicker===false)document.querySelector('.ticker-wrap').style.display='none';
   if(S.showParticles===false)document.getElementById('particles').style.display='none';
-  if(S.apiKey)document.getElementById('apiKeyInput').value=S.apiKey;
   updateNW();
 }
-function checkKey(){if(S.apiKey&&S.apiKey.startsWith('sk-ant'))document.getElementById('apiBanner').classList.add('hidden')}
 function startClock(){function t(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}t();setInterval(t,1000)}
 function buildParticles(){const el=document.getElementById('particles'),c=['#3B82F6','#7C3AED','#06B6D4','#10B981'];for(let i=0;i<26;i++){const p=document.createElement('div');p.className='pt';p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2.5+1}px;height:${Math.random()*2.5+1}px;background:${c[Math.floor(Math.random()*c.length)]};animation-delay:${Math.random()*20}s;animation-duration:${14+Math.random()*14}s;opacity:${Math.random()*0.35+0.08}`;el.appendChild(p)}}
 const TICKS=[{sym:'BIS',val:'$150,300',chg:'+0.20%',up:true},{sym:'SID',val:'$107,700',chg:'-2.97%',up:false},{sym:'CRYO',val:'$0',chg:'TARGET 2036',up:true},{sym:'RKLB',val:'SID',chg:'+85.0%',up:true},{sym:'DSY',val:'KILL',chg:'-90.0%',up:false},{sym:'ASML',val:'P1 TARGET',chg:'BUY',up:true},{sym:'SNPS',val:'P1 TARGET',chg:'BUY',up:true},{sym:'CDNS',val:'P1 TARGET',chg:'BUY',up:true},{sym:'KLAC',val:'P1 TARGET',chg:'BUY',up:true},{sym:'AMAT',val:'P1 TARGET',chg:'BUY',up:true},{sym:'ETN',val:'CRYO',chg:'HOLD',up:true},{sym:'NET WORTH',val:'$258K',chg:'$400K TARGET',up:true},{sym:'BIS P1',val:'$10K',chg:'UNDEPLOYED',up:false},{sym:'ACC610',val:'DUE',chg:'MAY 26',up:false},{sym:'GRIND FINDER',val:'v0.1',chg:'ACTIVE',up:true},{sym:'PBJ MODE',val:'READY',chg:'ONLINE',up:true}];
 function buildTicker(){function m(t){return`<span class="tick"><span class="tick-sym">${t.sym}</span><span class="tick-val">${t.val}</span><span class="tick-chg ${t.up?'up':'dn'}">${t.chg}</span></span><span class="tick-sep">|</span>`}document.getElementById('ticker').innerHTML=TICKS.map(m).join('')+TICKS.map(m).join('')}
+
 function showPage(i){document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('active',idx===i));document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i))}
+
 const pills=document.querySelectorAll('.mode-pill');let activeMode='ai';
 pills.forEach(m=>m.addEventListener('click',()=>{pills.forEach(x=>x.classList.remove('active'));m.classList.add('active');activeMode=m.dataset.mode}));
+
 function handleCommand(e){if(e.key==='Enter')runCommand()}
+
 async function runCommand(){
   const inp=document.getElementById('cmdInput').value.trim();if(!inp)return;
   if(activeMode==='web'){window.open('https://duckduckgo.com/?q='+encodeURIComponent(inp),'_blank');document.getElementById('cmdInput').value='';return}
   if(activeMode==='calc'){showModal('Net Worth','BIS: $150,300\nSID: $107,700\nCRYO: $0\nTotal: $258,000\nTarget: $400,000\nGap: $142,000\nProgress: 64.5%');document.getElementById('cmdInput').value='';return}
+
   const resp=document.getElementById('aiResponse'),txt=document.getElementById('aiText'),hdr=document.getElementById('aiHdr');
   resp.classList.add('show');txt.innerHTML='';hdr.style.display='flex';
-  if(!S.apiKey){hdr.style.display='none';txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings to enable AI responses.</span>';return}
+  
   let sys='';
-  if(activeMode==='grind')sys=grindSys();
-  else if(activeMode==='pbj')sys='You are the PBJ Framework analyst. Analyze every idea through PAIN (what problem, how intense, how frequent), BUYER (who pays, can they afford it, buying trigger), JUSTIFICATION (why now, cost of inaction). Give a PBJ Score 1-10 and a one-sentence verdict. Be sharp and direct.';
-  else sys='You are Michael Gregory\'s Command Center AI. Context: Grind Finder owner, portfolios BIS $150K / SID $108K / CRYO $0, net worth $258K toward $400K EOY 2026, BIS P1 semiconductor play $10K undeployed, DSY kill order -90%, ACC 610 due May 26, goal: Fractional COO consulting + Grind Finder as product, $180K revenue 2026. Answer as a sharp operational advisor. Maximum signal per word.';
-  await callClaude(sys,inp,txt,hdr);
+  if(activeMode==='grind')sys='You are Grind Finder(tm) — diagnose broken systems. Return: GRIND TYPE, CORE LOOP, BOTTLENECK, ROOT CAUSES, RECOMMENDED ACTION, PRIORITY SCORE. Be diagnostic.';
+  else if(activeMode==='pbj')sys='Analyze through PAIN (problem, intensity, frequency), BUYER (who pays, budget, trigger), JUSTIFICATION (why now, cost of inaction). Score 1-10. One-sentence verdict.';
+  else sys='You are Michael\'s operations advisor. Sharp, direct, maximum signal. Context: Grind Finder owner, portfolios BIS $150K/SID $108K/CRYO $0, net worth $258K→$400K, BIS P1 $10K semiconductor undeployed, goal Fractional COO, $180K revenue 2026.';
+  
+  await callVercel(sys,inp,txt,hdr);
   document.getElementById('cmdInput').value='';
 }
-function grindSys(){return`You are Grind Finder(tm). Diagnose broken systems and produce this exact structure:\n\nGRIND TYPE: [Ownership/Routing/Decision/Skill/Incentive/Visibility/Tool/Handoff/Capacity/Discipline/Design/Expectation/Memory/Authority/Policy/Vendor/Customer]\nCORE LOOP: Trigger > Path > Friction > Workaround > Outcome > Repeat\nVARIANCE TYPE: [Normal/Warning/Failure/Leverage]\nBOTTLENECK: where does flow slow/stop/bounce/fail?\nCONSTRAINTS: list relevant constraints\nROOT CAUSE HYPOTHESES: 1. 2. 3.\nGOOD PATTERN TO REPLICATE: what already works?\nRECOMMENDED ACTION: Replicate/Fix/Reroute/Automate/Train/Clarify/Retire/Ignore/Exploit\nLOW-COST FIX: with existing resources?\nPRIORITY SCORE: Frequency(1-5) x Impact(1-5) x Fixability(1-5) = total\nCONFIDENCE: Low/Medium/High\n\nBe sharp, concrete, diagnostic. No filler.`}
+
 async function runGrindFinder(){
   const inp=document.getElementById('grindInput').value.trim();if(!inp)return;
   const out=document.getElementById('grindOut'),txt=document.getElementById('grindText');
   out.classList.add('show');txt.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>ANALYZING THE GRIND...</span></div>';
-  if(!S.apiKey){txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings to enable AI analysis.</span>';return}
-  await callClaude(grindSys(),'Find the Grind: '+inp,txt,null);
+  const sys='You are Grind Finder(tm). Diagnose this bottleneck systematically: GRIND TYPE | CORE LOOP | BOTTLENECK | ROOT CAUSES | RECOMMENDED ACTION | PRIORITY SCORE | CONFIDENCE. Be diagnostic and actionable.';
+  await callVercel(sys,'Find the Grind: '+inp,txt,null);
 }
+
 async function runGrindQuick(){
   const inp=document.getElementById('grindInput').value.trim();if(!inp)return;
   const out=document.getElementById('grindOut'),txt=document.getElementById('grindText');
   out.classList.add('show');txt.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>QUICK SCAN...</span></div>';
-  if(!S.apiKey){txt.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings.</span>';return}
-  await callClaude('You are Grind Finder. Give a 3-line rapid diagnosis: 1) Grind Type, 2) Root Cause, 3) One immediate action. Brutally concise.',inp,txt,null,400);
+  const sys='You are Grind Finder. Give a 3-line rapid diagnosis: 1) Grind Type, 2) Root Cause, 3) One immediate action. Brutally concise.';
+  await callVercel(sys,inp,txt,null,400);
 }
+
 async function analyzeDecision(){
   const inp=document.getElementById('decisionInput').value.trim();if(!inp)return;
   const out=document.getElementById('decisionOut');
   out.classList.add('show');out.innerHTML='<div class="ai-hdr"><div class="spinner"></div><span>ANALYZING...</span></div>';
-  if(!S.apiKey){out.innerHTML='<span style="color:var(--yellow)">Add your Claude API Key in Settings.</span>';return}
-  await callClaude('You are Michael\'s decision advisor. Analyze through: 1) What does data say? 2) Cost of delay? 3) Risk of acting? 4) Recommended action. Sharp, direct, no hedge-speak.',inp,out,null,600);
+  const sys='You are Michael\'s decision advisor. Analyze through: 1) What does data say? 2) Cost of delay? 3) Risk of acting? 4) Recommended action. Sharp, direct, no hedge-speak.';
+  await callVercel(sys,inp,out,null,600);
 }
-async function callClaude(sys,msg,el,hdrEl,maxTok=1000){
+
+async function callVercel(sys,msg,el,hdrEl,maxTok=1000){
+  if(VERCEL_URL==='' || VERCEL_URL.includes('your-vercel')){
+    const msg='⚠️  Vercel URL not configured yet.\n\nAfter you deploy to Vercel and update the VERCEL_URL in dashboard.html, AI features will be live.\n\nFor now, use claude.ai directly for Grind Finder and PBJ analysis.';
+    if(hdrEl)hdrEl.style.display='none';
+    el.innerHTML=`<span style="color:var(--yellow)">${msg}</span>`;
+    return;
+  }
+  
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MODEL,max_tokens:maxTok,system:sys,messages:[{role:'user',content:msg}]})});
+    const r=await fetch(VERCEL_URL+'/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:msg,system:sys})});
     const d=await r.json();
     if(hdrEl)hdrEl.style.display='none';
-    if(d.content&&d.content[0]){el.innerHTML='';streamText(el,d.content[0].text)}
-    else el.innerHTML='<span style="color:var(--red)">Error: '+(d.error?.message||'Unknown')+'</span>';
-  }catch(e){if(hdrEl)hdrEl.style.display='none';el.innerHTML='<span style="color:var(--red)">Error: '+e.message+'</span>'}
+    if(d.success){el.innerHTML='';streamText(el,d.text)}
+    else el.innerHTML=`<span style="color:var(--red)">Error: ${d.error||'Unknown'}</span>`;
+  }catch(e){
+    if(hdrEl)hdrEl.style.display='none';
+    el.innerHTML=`<span style="color:var(--red)">Error: ${e.message}</span>`;
+  }
 }
+
 function streamText(el,text){el.innerHTML='';const cur=document.createElement('span');cur.className='typing-cursor';el.appendChild(cur);let i=0;function t(){if(i<text.length){cur.insertAdjacentText('beforebegin',text[i]);i++;setTimeout(t,7)}else cur.remove()}t()}
+
 function showModal(title,body){document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').textContent=body;document.getElementById('modalExtra').innerHTML='';document.getElementById('modal').classList.add('show')}
 function closeModal(){document.getElementById('modal').classList.remove('show')}
 function openSettings(){document.getElementById('settingsModal').classList.add('show')}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('show')}
-function saveApiKey(){const k=document.getElementById('apiKeyInput').value.trim();if(k){S.apiKey=k;saveS();checkKey();closeSettings();showModal('API Key Saved','Your Claude API key is stored locally in your browser.\n\nIt is never sent anywhere except api.anthropic.com when you run an AI query.\n\nAll AI features are now active.')}}
+function saveSettings(){saveS();closeSettings();showModal('Settings Saved','All your settings have been saved.')}
 function toggleSetting(key,val){S[key]=val;if(key==='showTicker')document.querySelector('.ticker-wrap').style.display=val?'':'none';if(key==='showParticles')document.getElementById('particles').style.display=val?'':'none';saveS()}
 function clearAllData(){if(confirm('Clear ALL saved data? This cannot be undone.')){localStorage.removeItem(LS);location.reload()}}
 function saveNow(){saveS();const b=event.target;b.textContent='Saved!';setTimeout(()=>b.textContent='Save Now',2000)}
@@ -550,10 +568,9 @@ function drillInto(t){if(t==='networth')showModal('Net Worth Breakdown','BIS: $1
 function activateCryo(){showModal('Activate CRYO','Activation Plan: $10,000 Initial Deploy\n\nPower Infrastructure (60% = $6,000):\nETN, GEV, PWR, VRT\n\nOcean/Subsea (30% = $3,000):\nTDY, IRDM, SPGI\n\nDry Powder: $1,000\n\n10-Year Horizon: 2036\nTarget: $250,000')}
 function fixAction(a){if(a==='bis-data')showModal('Fix BIS Data Discrepancy','Tracker: $150,300 across 60 tickers\nYou said: $0\n\nAction:\n1. Log into E*TRADE\n2. Check actual deployed balance\n3. If REAL: update memory and confirm positions\n4. If PLACEHOLDER: clear tracker, start fresh\n\nGrind Type: Visibility Grind\nPriority: P0');else if(a==='dsy')showModal('DSY Kill Order','Status: -90% loss\n\nAction: Sell ALL shares immediately\n\nReallocation:\n50% SNPS (Synopsys)\n50% CDNS (Cadence Design)\n\nGrind Type: Incentive Grind\nCost of delay: Opportunity cost compounding daily');else if(a==='acc610')showModal('ACC 610 Assignment','Due: Sunday, May 26, 2026\nStatus: NOT STARTED\n\nAction: Open Canvas/Blackboard NOW\n\nGrind Type: Discipline Grind\nConstraint: Memory + attention\nFix: Block 2 hours today. Nothing else until started.')}
 function activateP1(){showModal('BIS P1 — Semiconductor Dominance','$10,000 Deployment Plan:\n\nASML (30%) — $3,000\nSNPS (20%) — $2,000\nCDNS (20%) — $2,000\nKLAC (15%) — $1,500\nAMAT (15%) — $1,500\n\nThesis: Semiconductor dominance. These companies build the tools that make the chips that run everything.\n\nApproved: 3 weeks ago\nStatus: UNDEPLOYED\nAction: Deploy today.')}
-function addBottleneck(){const t=document.getElementById('newBotTitle').value.trim(),d=document.getElementById('newBotDesc').value.trim(),p=document.getElementById('newBotPriority').value;if(!t)return;S.bottlenecks.push({title:t,desc:d,priority:p,created:new Date().toISOString()});saveS();document.getElementById('newBotTitle').value='';document.getElementById('newBotDesc').value='';showModal('Bottleneck Added','"'+t+'" saved. Use Grind Finder to run a full diagnosis.')}
+function addBottleneck(){const t=document.getElementById('newBotTitle').value.trim(),d=document.getElementById('newBotDesc').value.trim(),p=document.getElementById('newBotPriority').value;if(!t)return;S.bottlenecks.push({title:t,desc:d,priority:p,created:new Date().toISOString()});saveS();document.getElementById('newBotTitle').value='';document.getElementById('newBotDesc').value='';showModal('Bottleneck Added','"'+t+'" saved.')}
 function voteIdea(i){const c=document.getElementById('idea-'+i),b=c.querySelector('.vote'),n=parseInt(b.textContent.replace('\u25b2 ',''));b.textContent='\u25b2 '+(n+1);c.classList.toggle('voted')}
 function addIdea(){const t=document.getElementById('newIdeaTitle').value.trim(),d=document.getElementById('newIdeaDesc').value.trim();if(!t)return;const l=document.getElementById('ideaList'),idx=l.children.length;const div=document.createElement('div');div.className='idea';div.id='idea-'+idx;div.innerHTML=`<button class="vote" onclick="voteIdea(${idx})">\u25b2 0</button><div class="li-title">${t}</div><div class="li-desc">${d}</div>`;l.appendChild(div);document.getElementById('newIdeaTitle').value='';document.getElementById('newIdeaDesc').value='';S.ideas.push({title:t,desc:d,votes:0});saveS()}
-function showGithubSetup(){showModal('GitHub Pages Setup — 5 Minutes','STEP 1: Create repo\ngithub.com/new\nName: michael-command-center\nVisibility: Public\nDo NOT add README\n\nSTEP 2: Upload this file\nDrag dashboard.html onto the repo page\nCommit directly to main\n\nSTEP 3: Enable GitHub Pages\nSettings > Pages\nSource: Deploy from branch\nBranch: main / (root)\nClick Save\n\nSTEP 4: Bookmark this URL:\nhttps://Mgregory2K.github.io/michael-command-center/dashboard.html\n\nSTEP 5: Update anytime\nEdit dashboard.html > commit > live in ~60 seconds\n\nTotal: ~5 minutes. Browser-independent. Zero cost.')}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeSettings()}if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();document.getElementById('cmdInput').focus()}});
 init();
 </script>
