@@ -1,0 +1,10 @@
+{
+  "name": "michael-command-center",
+  "version": "2.2.0",
+  "description": "Operations dashboard with Grind Finder",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site'"
+  }
+}
